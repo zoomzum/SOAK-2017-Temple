@@ -1,2 +1,27 @@
 # SOAK-2017-Temple
 This is for crowdsourced contributions to the lighting display for the temple for SOAK 2017: Superstition.
+
+Temple this year is a Viking ship with an 8'x12' sail consisting of 10 illuminated panels, each being 8' tall and 10" wide, separated by a 4" gap with a string of mirrors in each gap.  Each panel is lit with a strip of WS2811 LEDs (30/meter) on each side and along the top. LED 0 is at the bottom left of the first sail element, LED 149 is at the bottom right of the first sail element, 150 is at the bottom left of the second element, etc.
+
+I have created a two dimensional array to help you if you want to use it. Sail(1,1) refers to LED 0, Sail(1,70) refers to LED 69 (top left).  Sail(2,1) refers to LED 149 (bottom right of the first element).  This way you can refer to each LED by its x/y coordinate.  The top row of each strip can be addressed using Sai1Top(1) through SailTop(5) (left to right) for the first element Sai1Top(6) through SailTop(10) for the second element, etc.
+
+Or you can use led(x) if you want to provide your own instructions. 
+
+Temple Sail Layout:
+    
+    ....   ....   ....   ....   ....   ....   ....   ....   ....   ....
+y70|    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    | 
+ . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ 5 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ 4 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ 3 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ 2 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ 1 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ 0 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ 
+ x 1    2 3    4 5    6 7    8 9   10 11  12 13  14 15  16 17  18 19   20
