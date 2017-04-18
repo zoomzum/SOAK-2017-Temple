@@ -1,8 +1,8 @@
 # SOAK-2017-Temple
 This is for crowdsourced contributions to the lighting display for the temple for SOAK 2017: Superstition.
 
-Temple this year is a Viking ship with an 8'x12' sail consisting of 10 illuminated panels, each being 8' tall and 10" wide, separated by a 4" gap with a string of mirrors in each gap.  Each panel is lit with a strip of WS2811 LEDs (30/meter) on each side and along the top and bottom. LED 4 is at the bottom left of the first sail element, LED 145 is at the bottom right of the first sail element, 154 is at the bottom left of the second element, etc. 
-Here is the led lyout for the fitst element:
+Temple this year is a Viking ship with an 8'x12' sail consisting of 10 illuminated panels, each being 8' tall and 10" wide, separated by a 4" gap with a string of mirrors in each gap.  Each panel is lit with a strip of WS2811 LEDs (30/meter) 69 on each side and 6 along the top and bottom. LED 3 is at the bottom left of the first sail element, LED 146 is at the bottom right of the first sail element, 153 is at the bottom left of the second element, etc. 
+Here is the led layout for the first element:
 <pre>
   7 7 7 7 7 7
   3 4 5 6 7 8
