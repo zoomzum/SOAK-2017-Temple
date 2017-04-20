@@ -99,7 +99,5 @@ for (int numsail = 2;numsail<=10; numsail++){
 SailTop[numsail][pos]= SailTop[numsail-1][pos]+150;
 }
 }
-Serial.begin(9600);
-Serial.print(SailBottom[0][1]);
 }
 
