@@ -25,14 +25,14 @@ Here is the led layout for the first element:
        4 4 4
        9 8 7
  </pre>
-I have created a two dimensional array to help you if you want to use it. Sail(1,1) refers to LED 4, Sail(1,70) refers to LED 72 (top left).  Sail(2,1) refers to LED 146 (bottom right of the first element).  This way you can refer to each LED by its x/y coordinate.  The top row of each strip can be addressed using Sai1Top(1) through SailTop(6) (left to right) for the first element Sai1Top(7) through SailTop(12) for the second element, etc. Likewise, the bottom row can be referenced with SailBottom(1) through Sailbottom(6) for the first element, etc.
+I have created a two dimensional array to help you if you want to use it. Sail(1,1) refers to LED 4, Sail(1,70) refers to LED 72 (top left).  Sail(2,1) refers to LED 146 (bottom right of the first element).  This way you can refer to each LED by its x/y coordinate.  The top row of each strip can be addressed using Sai1Top[1][1] through SailTop[1][6] (left to right) for the first element Sai1Top[2][1] through SailTop[2][6] for the second element, etc. Likewise, the bottom row can be referenced with SailBottom[1][1] through SailBottom[1][6] for the first element, etc.
 
-Or you can use led(x) if you want to provide your own instructions. 
+Or you can use led(x) if you want to provide your own instructions. See above diagram and add 150 for each sail elemment, from lrfy yo right.
 
 Temple Sail Layout:
 <pre>
       ....   ....   ....   ....   ....   ....   ....   ....   ....   ....  
-  y72|    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
+  y69|    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
    . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
    . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
    . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
