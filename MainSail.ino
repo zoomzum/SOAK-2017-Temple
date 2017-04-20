@@ -35,69 +35,70 @@ y69|    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
 
 const int ledsPerStrip = 300;
 
-DMAMEM int displayMemory[ledsPerStrip*6];
-int drawingMemory[ledsPerStrip*6];
+DMAMEM int displayMemory[ledsPerStrip * 6];
+int drawingMemory[ledsPerStrip * 6];
 
-const int config = WS2811_GRB| WS2811_800kHz;
+const int config = WS2811_GRB | WS2811_800kHz;
 
 OctoWS2811 leds(ledsPerStrip, displayMemory, drawingMemory, config);
 
 int  Sail[21][72];
-int  SailBottom[10][7] = {2,1,0,149,148,147};
-int  SailTop[10][7] ={72,73,74,75,76,77};
+int  SailBottom[10][7] = {2, 1, 0, 149, 148, 147};
+int  SailTop[10][7] = {72, 73, 74, 75, 76, 77};
 
 void setup() {
-makeArray();
+  makeArray();
 }
 
 void loop() {
-leds.begin();
+  leds.begin();
 
 
-for (int n=0;n<200;n++){
-SequenceA();
-}
-
-for (int n=0;n<200;n++){
-SequenceB();
-}
-}
-
-
-void makeArray(){
-int y,s;
-s=0;
-// int Sail[20][72];
-for (int x=1; x<20; x+=2){ 
- int l = 3 + (150 * s);
-    int  l2 = l+143;
-  for (y=1; y<70; y++){  
- Sail[x][y] = l++;
- Sail[x+1][y] = l2--;
+  for (int n = 0; n < 200; n++) {
+    SequenceA();
   }
-   s++;
- 
-}  
-//Serial.begin(9600);
-//Serial.print(SailBottom[0][1]);
-SailBottom[1][1] = 2;
-SailBottom[1][2] = 1;
-SailBottom[1][3] = 0;
-SailBottom[1][4] = 149;
-SailBottom[1][5] = 148;
-SailBottom[1][6] = 147;
 
-SailTop[1][1]= 72;
-SailTop[1][2]= 73;
-SailTop[1][3]= 74;
-SailTop[1][4]= 75;
-SailTop[1][5]= 76;
-SailTop[1][6]= 77;
+  for (int n = 0; n < 200; n++) {
+    SequenceB();
+  }
+}
 
-for (int numsail = 2;numsail<=10; numsail++){
- for (int pos=1; pos<7; pos++){SailBottom[numsail][pos]= SailBottom[numsail-1][pos]+150;
-SailTop[numsail][pos]= SailTop[numsail-1][pos]+150;
-}
-}
+
+void makeArray() {
+  int y, s;
+  s = 0;
+  // int Sail[20][72];
+  for (int x = 1; x < 20; x += 2) {
+    int l = 3 + (150 * s);
+    int  l2 = l + 143;
+    for (y = 1; y < 70; y++) {
+      Sail[x][y] = l++;
+      Sail[x + 1][y] = l2--;
+    }
+    s++;
+
+  }
+  //Serial.begin(9600);
+  //Serial.print(SailBottom[0][1]);
+  SailBottom[1][1] = 2;
+  SailBottom[1][2] = 1;
+  SailBottom[1][3] = 0;
+  SailBottom[1][4] = 149;
+  SailBottom[1][5] = 148;
+  SailBottom[1][6] = 147;
+
+  SailTop[1][1] = 72;
+  SailTop[1][2] = 73;
+  SailTop[1][3] = 74;
+  SailTop[1][4] = 75;
+  SailTop[1][5] = 76;
+  SailTop[1][6] = 77;
+
+  for (int numsail = 2; numsail <= 10; numsail++) {
+    for (int pos = 1; pos < 7; pos++) {
+      SailBottom[numsail][pos] = SailBottom[numsail - 1][pos] + 150;
+      SailTop[numsail][pos] = SailTop[numsail - 1][pos] + 150;
+    }
+  }
 }
 
