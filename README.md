@@ -5,9 +5,8 @@ Temple this year is a Viking ship with an 8'x12' sail consisting of 10 illuminat
 Here is the led layout for the first element:
 <pre>
   7 7 7 7 7 7
-  3 4 5 6 7 8
-72           79
-71           80
+  2 3 4 5 6 7 
+71           78
 .            .
 .            .
 .            .
@@ -18,23 +17,21 @@ Here is the led layout for the first element:
 .            .
 .            .
 .            .
-5            .
-4            145
-3            146
- 2 1 0 1 1 1
-       4 4 4
-       9 8 7
+2            147
+1            148
+0            149
+ 
  </pre>
-I have created a two dimensional array to help you if you want to use it. Sail(1,1) refers to LED 4, Sail(1,69) refers to LED 72 (top left).  Sail(2,1) refers to LED 146 (bottom right of the first element).  This way you can refer to each LED by its x/y coordinate.  The top row of each strip can be addressed using Sai1Top[1][1] through SailTop[1][6] (left to right) for the first element Sai1Top[2][1] through SailTop[2][6] for the second element, etc. Likewise, the bottom row can be referenced with SailBottom[1][1] through SailBottom[1][6] for the first element, etc.
+I have created a two dimensional array to help you if you want to use it. Sail(1,1) refers to LED 4, Sail(1,72refers to LED 71 (top left).  Sail(2,1) refers to LED 149 (bottom right of the first element).  This way you can refer to each LED by its x/y coordinate.  The top row of each strip can be addressed using Sai1Top[1][1] through SailTop[1][6] (left to right) for the first element Sai1Top[2][1] through SailTop[2][6] for the second element, etc.
 
 See SequenceA and SequenceB for examples. Have fun!!
 
-Or you can use led(x) if you want to provide your own instructions. See above diagram and add 150 for each sail elemment, from lrfy yo right.
+Or you can use led(x) if you want to provide your own instructions. See above diagram and add 150 for each sail elemment, from left to right.
 
 Temple Sail Layout:
 <pre>
       ....   ....   ....   ....   ....   ....   ....   ....   ....   ....  
-  y69|    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
+ y72 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
    . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
    . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
    . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
