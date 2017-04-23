@@ -26,7 +26,7 @@ I have created a two dimensional array to help you if you want to use it. Sail(1
 
 See SequenceA and SequenceB for examples. Have fun!!
 
-Or you can use led(x) if you want to provide your own instructions. See above diagram and add 150 for each sail elemment, from left to right.
+Or you can use led(x) if you want to provide your own instructions. See above diagram and add 150 for each sail element, from left to right.
 
 Temple Sail Layout:
 <pre>
