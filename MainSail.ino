@@ -1,3 +1,5 @@
+
+
 /* Required Connections
   --------------------
    pin 2:  LED Strip #1    OctoWS2811 drives 8 LED Strips.
@@ -30,47 +32,116 @@
 
   x 1    2 3    4 5    6 7    8 9   10 11  12 13  14 15  16 17  18 19   20
 */
-
+#define USE_OCTOWS2811
 #include <OctoWS2811.h>
+#include <FastLED.h>
 
-const int ledsPerStrip = 300;
 
-DMAMEM int displayMemory[ledsPerStrip * 6];
-int drawingMemory[ledsPerStrip * 6];
+//===============
+#define NUM_LEDS_PER_STRIP 300
+#define NUM_STRIPS 10
+//added for fastLED
+CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP];
+const int numOfBytes = NUM_LEDS_PER_STRIP * NUM_STRIPS * 3;
+const int numLeds = NUM_STRIPS * NUM_LEDS_PER_STRIP;
 
-const int config = WS2811_GRB | WS2811_800kHz;
+char inputBuffer[numOfBytes];
 
-OctoWS2811 leds(ledsPerStrip, displayMemory, drawingMemory, config);
-
-int  Sail[21][72];
-int  SailTop[10][7] = {73, 74, 75, 76, 77, 78};
+int  Sail[21][80];
+int  SailTop[11][7] = {73, 74, 75, 76, 77, 78};
+elapsedMillis sStart;
+unsigned long sEnd = 10000;
+boolean cont;
 
 void setup() {
+  LEDS.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
+  LEDS.setBrightness(255);
+  delay(500);
+  Serial.begin(115200);
+  Serial.setTimeout(500);
+  LEDS.show();
+
   makeArray();
 }
 
 void loop() {
-  leds.begin();
 
+  //  if(Serial.available()>0){
+  //  Serial.readBytes(inputBuffer, numOfBytes);
 
-  for (int n = 0; n < 200; n++) {
-    SequenceA();//SparklePony
+  fill_solid( &(leds[0]), 1500, CRGB(0, 0, 0) );
+  LEDS.setBrightness(255);
+
+   sStart = 0;
+  sEnd=30000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+
+ //PLACE THE NAME OF YOUR ROUTINE HERE.  It will run for 30 seconds.  If you need to adjust this, change sEnd above to the number of milliseconds you want it to run.      
+      SequenceA();
+//^^^^^^^^^^^^^^^^^^^^^^^^    
+    } else {
+      cont = false;
+    }
+  }
+  
+/*
+  sStart = 0;
+  sEnd=10000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+      Sparkles();
+    } else {
+      cont = false;
+    }
   }
 
-  for (int n = 0; n < 200; n++) {
+
+sStart = 0;
+sEnd=10000;
+cont = true;
+while (cont == true) {
+  if (sStart < sEnd) {
     SequenceB();//CascadeUp
-  }
-}
+  } else {
+    cont = false;
+  }}
 
+  sStart = 0;
+  cont = true;
+  sEnd=30000;
+  while (cont == true) {
+    if (sStart < sEnd) {
+      Rain();
+    } else {
+      cont = false;
+    }
+  }
+
+sStart = 0;
+  cont = true;
+  sEnd=20000;
+  while (cont == true) {
+    if (sStart < sEnd) {
+      Rainbow();
+    } else {
+      cont = false;
+    }
+  }
+
+*/
+}//end of loop
 
 void makeArray() {
   int y, s;
   s = 0;
-  // int Sail[20][72];
+
   for (int x = 1; x < 20; x += 2) {
     int l =  (150 * s);
     int  l2 = l + 149;
-    for (y = 1; y < 73; y++) {
+    for (y = 1; y <= 75; y++) {
       Sail[x][y] = l++;
       Sail[x + 1][y] = l2--;
     }
@@ -86,8 +157,21 @@ void makeArray() {
   SailTop[1][6] = 77;
 
   for (int numsail = 2; numsail <= 10; numsail++) {
-    for (int pos = 1; pos <= 6; pos++)
+    for (int pos = 1; pos <= 6; pos++) {
       SailTop[numsail][pos] = SailTop[numsail - 1][pos] + 150;
+    }
   }
 }
+
+
+
+boolean Show() {
+  if (sStart > sEnd) {
+    cont = false;
+    return cont;
+  }
+  //test pin here
+  LEDS.show();
+  return true;
+
 }
