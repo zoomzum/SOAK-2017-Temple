@@ -5,8 +5,8 @@ Temple this year is a Viking ship with an 8'x12' sail consisting of 10 illuminat
 Here is the led layout for the first element:
 <pre>
   7 7 7 7 7 7
-  2 3 4 5 6 7 
-71           78
+  3 4 5 6 7 8
+72           79
 .            .
 .            .
 .            .
@@ -22,16 +22,16 @@ Here is the led layout for the first element:
 0            149
  
  </pre>
-I have created a two dimensional array to help you if you want to use it. Sail(1,1) refers to LED 4, Sail(1,72refers to LED 71 (top left).  Sail(2,1) refers to LED 149 (bottom right of the first element).  This way you can refer to each LED by its x/y coordinate.  The top row of each strip can be addressed using Sai1Top[1][1] through SailTop[1][6] (left to right) for the first element Sai1Top[2][1] through SailTop[2][6] for the second element, etc.
+I have created a two dimensional array to help you if you want to use it. Sail[1][1] refers to LED 0, Sail[1][72]refers to LED 71 (top left).  Sail(2,1) refers to LED 149 (bottom right of the first element).  This way you can refer to each LED by its x/y coordinate.  The top row of each strip can be addressed using Sai1Top[1][1] through SailTop[1][6] (left to right) for the first element Sai1Top[2][1] through SailTop[2][6] for the second element, etc.
 
-See SequenceA and SequenceB for examples. Have fun!!
+See the code in the  Zoom or Paul files for examples. Have fun!!
 
 Or you can use led(x) if you want to provide your own instructions. See above diagram and add 150 for each sail element, from left to right.
 
 Temple Sail Layout:
 <pre>
       ....   ....   ....   ....   ....   ....   ....   ....   ....   ....  
- y72 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |
+ y72 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    | Sail[20][72] or led(1428)
    . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
    . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
    . |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
@@ -42,7 +42,7 @@ Temple Sail Layout:
    4 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
    3 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
    2 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
-   1 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    |  
+   1 |    | |    | |    | |    | |    | |    | |    | |    | |    | |    | Sail[20][1] or led(1500)  
       ....   ....   ....   ....   ....   ....   ....   ....   ....   ....
    x 1    2 3    4 5    6 7    8 9   10 11  12 13  14 15  16 17  18 19   20'
 </pre>
