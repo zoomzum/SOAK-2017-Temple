@@ -55,7 +55,7 @@ boolean cont;
 
 void setup() {
   LEDS.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
-  LEDS.setBrightness(255);
+  LEDS.setBrightness(100);
   delay(500);
   Serial.begin(115200);
   Serial.setTimeout(500);
@@ -73,21 +73,21 @@ void loop() {
   LEDS.setBrightness(255);
 
    sStart = 0;
-  sEnd=30000;
+  sEnd=50000;
   cont = true;
   while (cont == true) {
     if (sStart < sEnd) {
 
  //PLACE THE NAME OF YOUR ROUTINE HERE.  It will run for 30 seconds.  If you need to adjust this, change sEnd above to the number of milliseconds you want it to run.      
-      SequenceA();
+      Sparkles();
 //^^^^^^^^^^^^^^^^^^^^^^^^    
     } else {
-      cont = false;
+    cont = false;
     }
   }
   
-/*
-  sStart = 0;
+
+ /* sStart = 0;
   sEnd=10000;
   cont = true;
   while (cont == true) {
@@ -97,7 +97,7 @@ void loop() {
       cont = false;
     }
   }
-
+*/
 
 sStart = 0;
 sEnd=10000;
@@ -108,7 +108,7 @@ while (cont == true) {
   } else {
     cont = false;
   }}
-
+/*
   sStart = 0;
   cont = true;
   sEnd=30000;
@@ -130,7 +130,7 @@ sStart = 0;
       cont = false;
     }
   }
-
+/*
 */
 }//end of loop
 

@@ -10,10 +10,12 @@ void Sparkles() {
     x = random(255);
     y = random(255);
     z = random(255);
-    //    leds.setPixel(n, x, y, z);
-    leds[n] = CHSV( x, y, z);
+   //    leds.setPixel(n, x, y, z);
+    leds[50] = CRGB( x, y, z);
  }
-  Show();
+ 
+ Show();
+// Show();
   delay(100);
   fill_solid( &(leds[i]), 1500, CRGB(0,0, 0) );
  // LEDS.clear()1
@@ -77,6 +79,7 @@ void Rain() {
 }
 
 void Rainbow() {
+  LEDS.setBrightness(50);
   static uint8_t hue = 0;
   for(int i = 0; i < NUM_STRIPS; i++) {
     for(int j = 0; j < NUM_LEDS_PER_STRIP; j++) {
