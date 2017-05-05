@@ -73,7 +73,7 @@ void loop() {
   LEDS.setBrightness(255);
 
    sStart = 0;
-  sEnd=50000;
+  sEnd=30000;
   cont = true;
   while (cont == true) {
     if (sStart < sEnd) {
@@ -97,14 +97,14 @@ void loop() {
       cont = false;
     }
   }
-*/
+
 
 sStart = 0;
-sEnd=10000;
+sEnd=30000;
 cont = true;
 while (cont == true) {
   if (sStart < sEnd) {
-    SequenceB();//CascadeUp
+    Sparkles();//CascadeUp
   } else {
     cont = false;
   }}
@@ -172,6 +172,6 @@ boolean Show() {
   }
   //test pin here
   LEDS.show();
-  return true;
-
+  cont = true;
+return cont;
 }

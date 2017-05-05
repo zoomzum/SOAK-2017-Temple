@@ -1,5 +1,6 @@
 //Sparkles
 void Sparkles() {
+  while(cont){
   //
   int l, lnum, n,  x, y, z , i=0;
 
@@ -11,15 +12,15 @@ void Sparkles() {
     y = random(255);
     z = random(255);
    //    leds.setPixel(n, x, y, z);
-    leds[50] = CRGB( x, y, z);
+    leds[n] = CRGB( x, y, z);
  }
  
- Show();
+ cont = Show();
 // Show();
   delay(100);
   fill_solid( &(leds[i]), 1500, CRGB(0,0, 0) );
  // LEDS.clear()1
-} 
+}} 
 
 //Slow Fade
 void SequenceB() { 
@@ -32,15 +33,12 @@ void SequenceB() {
       for (int ld = 1; ld <= lnum; ld++) {
         for (int x = 1; x <= 20; x++) {
           leds[Sail[x][ld]] = CRGB( abs(red),abs(green), abs(blue));
-          }
-         
-        Show();
-      
-    delay(1);
+         } Show();
+     delay(1);
     //    fill_solid( &(leds[i]), 1500, CRGB(0,0, 00) );
       }
-    }
-
+   }
+ 
   }
 }
 
