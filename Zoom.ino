@@ -15,7 +15,8 @@ void Sparkles() {
     leds[n] = CRGB( x, y, z);
  }
  
- cont = Show();
+ 
+    if(!Show()) return; 
 // Show();
   delay(100);
   fill_solid( &(leds[i]), 1500, CRGB(0,0, 0) );
@@ -23,7 +24,7 @@ void Sparkles() {
 }} 
 
 //Slow Fade
-void SequenceB() { 
+void SequenceB() { while (cont){
   LEDS.setBrightness(100);
   int lnum = 75;
   int green = 0;
@@ -33,33 +34,36 @@ void SequenceB() {
       for (int ld = 1; ld <= lnum; ld++) {
         for (int x = 1; x <= 20; x++) {
           leds[Sail[x][ld]] = CRGB( abs(red),abs(green), abs(blue));
-         } Show();
+         } cont =Show();
+           if(!cont) {return;} 
      delay(1);
     //    fill_solid( &(leds[i]), 1500, CRGB(0,0, 00) );
       }
    }
  
   }
-}
+}}
 
 //Raindrops
-void Rain() {
+void Rain() {while (cont){
   int i = 0, brt = 30;
   fill_solid( &(leds[i]), 1500, CRGB(0, 0, 10) );
-  Show();
+    if(!Show()) return; 
   int s;
   int  st ;
   for ( s = 1; s <= 20; s++) {
     st =  ((s + 1) / 2 + .5) ;
     for (brt = 30; brt <= 50; brt ++) {
       fill_solid( &leds[SailTop[st][1]], 6, CRGB(0, 0, brt));//}
-      LEDS.show();
-
+   
+      if(!Show()) return; 
+ 
       delay (1);
     }
 
     fill_solid( &leds[SailTop[st][1]], 6, CRGB(0, 0, 30));
-    Show();
+ 
+     if(!Show()) return; 
 
     for (int y1 = 72; y1 > 1; y1--) {
       leds[Sail[s][y1]] = CRGB(0, 0, 255);
@@ -71,12 +75,14 @@ void Rain() {
       leds[Sail[s][y1 + 6]] = CRGB(0, 0, 30);
 
       LEDS.delay (1);
-      Show();
+    //cont =  Show();
+    if(!Show()) return; 
+    //if(!cont) {return;} 
     }
   }
-}
+}}
 
-void Rainbow() {
+void Rainbow() {while (cont){
   LEDS.setBrightness(50);
   static uint8_t hue = 0;
   for(int i = 0; i < NUM_STRIPS; i++) {
@@ -94,6 +100,6 @@ void Rainbow() {
 
   hue++;
 
- Show();
+  if(!Show()) return; 
   LEDS.delay(10);
-}
+}}

@@ -1,7 +1,7 @@
 //Please use the comand Show() instead of LEDS.show().  This will allow for code interruption after a set period in the case of an endless loop.
 //Also, please try to avoid endless loops.  The calling function is set to repeat your sequence for 30 seconds, and it's the only sequence running, it will continue to repeat.
 
-void CoolGradient() {
+void CoolGradient() {while (cont){
   LEDS.setBrightness(100);
   int lnum = 75;
   int red = 0;
@@ -13,14 +13,13 @@ void CoolGradient() {
             leds[Sail[x+sail][ld]] = CRGB( abs(red),abs(green), abs(blue));
           }
         }
-        Show();
+       if(!Show()) return; 
         delay(5);
       }
     }
   } 
-} 
-
-void Corner() {
+} }
+void Corner() {while (cont){
   LEDS.setBrightness(50);
   int red = 1;
   int blue = 0;
@@ -41,9 +40,9 @@ void Corner() {
          leds[Sail[x][(-(4*x)+b)-w]] = CRGB(red, blue, green);
        }
     }
-    Show();
+     if(!Show()) return; 
     delay(1);
     fill_solid( &(leds[0]), 1500, CRGB(0, 0, 0) );
   }
-}
+} }
 

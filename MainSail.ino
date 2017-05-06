@@ -32,6 +32,9 @@
 
   x 1    2 3    4 5    6 7    8 9   10 11  12 13  14 15  16 17  18 19   20
 */
+
+
+
 #define USE_OCTOWS2811
 #include <OctoWS2811.h>
 #include <FastLED.h>
@@ -40,6 +43,7 @@
 //===============
 #define NUM_LEDS_PER_STRIP 300
 #define NUM_STRIPS 10
+const int PIN_D17 = 17;
 //added for fastLED
 CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP];
 const int numOfBytes = NUM_LEDS_PER_STRIP * NUM_STRIPS * 3;
@@ -54,6 +58,7 @@ unsigned long sEnd = 10000;
 boolean cont;
 
 void setup() {
+   pinMode(PIN_D17, INPUT_PULLUP);
   LEDS.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
   LEDS.setBrightness(100);
   delay(500);
@@ -86,13 +91,13 @@ void loop() {
     }
   }
   
-
- /* sStart = 0;
+/*
+sStart = 0;
   sEnd=10000;
   cont = true;
   while (cont == true) {
     if (sStart < sEnd) {
-      Sparkles();
+      CoolGradient();
     } else {
       cont = false;
     }
@@ -104,11 +109,11 @@ sEnd=30000;
 cont = true;
 while (cont == true) {
   if (sStart < sEnd) {
-    Sparkles();//CascadeUp
+   Corner();//CascadeUp
   } else {
     cont = false;
   }}
-/*
+
   sStart = 0;
   cont = true;
   sEnd=30000;
@@ -126,6 +131,17 @@ sStart = 0;
   while (cont == true) {
     if (sStart < sEnd) {
       Rainbow();
+    } else {
+      cont = false;
+    }
+  }
+
+  sStart = 0;
+  cont = true;
+  sEnd=20000;
+  while (cont == true) {
+    if (sStart < sEnd) {
+      SequenceB();
     } else {
       cont = false;
     }
@@ -166,12 +182,14 @@ void makeArray() {
 
 
 boolean Show() {
-  if (sStart > sEnd) {
+  if (sStart > sEnd || digitalRead(PIN_D17)==LOW) {
+    delay(10);
     cont = false;
     return cont;
   }
   //test pin here
   LEDS.show();
+  
   cont = true;
 return cont;
 }
