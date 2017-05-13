@@ -19,13 +19,13 @@
 #include <SPI.h>
 
 // The display size and color to use
-const unsigned int matrix_width = 40;
-const unsigned int matrix_height = 60;
- unsigned int myColor ;//= random(6555);// 0x400020;
+const unsigned int matrix_width = 21;
+const unsigned int matrix_height = 40;
+ unsigned int myColor =  0x400020;
 
 // These parameters adjust the vertical thresholds
-const float maxLevel = .005;      // 1.0 = max, lower is more "sensitive"
-const float dynamicRange = 40.0; // total range to display, in decibels
+const float maxLevel = .1;      // 1.0 = max, lower is more "sensitive"
+const float dynamicRange = 80.0; // total range to display, in decibels
 const float linearBlend = .7;   // useful range is 0 to 0.7
 extern "C" float pow10f(float);
 // OctoWS2811 objects
@@ -52,8 +52,8 @@ float thresholdVertical[matrix_height];
 // use a small number of bins, higher frequencies use more.
 int frequencyBinsHorizontal[matrix_width] = {
    2,  2, 2, 2,  2, 2,  2, 2,  2,  2,
-   2,  2,  2,  2,  4,  5,  8,  10,  10,  20};/*,
-   3,  3,  3,  3,  4,  4,  4,  4,  4,  5,
+   2,  2,  2,  2,  4,  5,  8,  10,  10,  10,
+   10 };/*,3,  3,  3,  4,  4,  4,  4,  4,  5,
    5,  5,  6,  6,  6,  7,  7,  7,  8,  8,
    9,  9, 10, 10, 11, 12, 12, 13, 14, 15,
   15, 16, 17, 18, 19, 20, 22, 23, 24, 25
@@ -72,6 +72,7 @@ void Sounder() {
   // turn on the display
 //  leds.begin();
  Show();
+loopme();
 }
 
 // A simple xy() function to turn display matrix coordinates
@@ -85,6 +86,7 @@ unsigned int xy(unsigned int x, unsigned int y) {
     // odd numbered rows (1, 3, 5...) are right to left
     return y * matrix_width + matrix_width - 1 - x;
   }
+ 
 }
 
 // Run repetitively
@@ -92,7 +94,7 @@ void loopme() {while(cont){
   unsigned int x, y, freqBin;
   float level;
   if (fft.available()) {
-  myColor = makeColor(random(360),random(255),random(100));  // freqBin counts which FFT frequency data has been used,
+ // myColor = makeColor(random(360),random(255),random(100));  // freqBin counts which FFT frequency data has been used,
     // starting at low frequency
     freqBin = 0;
 
@@ -101,18 +103,23 @@ void loopme() {while(cont){
       level = fft.read(freqBin, freqBin + frequencyBinsHorizontal[x] - 1);
 
       // uncomment to see the spectrum in Arduino's Serial Monitor
-     //Serial.print(freqBin);
-      //Serial.print("  ");
-      delay(1);
+    //Serial.print(level);
+    // Serial.print("  ");
+     // delay(1);
 
       for (y=0; y < matrix_height; y++) {
         // for each vertical pixel, check if above the threshold
         // and turn the LED on or off
         if (level >= thresholdVertical[y]) {
-          leds[xy(x, y)]= myColor;
+          leds[Sail[x][y]]= myColor;
+           leds[Sail[x][y+((36-y)*2)]] = myColor;
+           Serial.print(y);
+     Serial.print("  ");
          // leds.setPixel(xy(x, y), myColor);
         } else {
-          leds[xy(x, y)]= 0x000000;
+          leds[Sail[x][y]]= 0x000000;
+         
+         leds[Sail[x][y+((36-y)*2)]]= 0x000000;
         }
       }
       // increment the frequency bin count, so we display
@@ -121,7 +128,7 @@ void loopme() {while(cont){
     }
     // after all pixels set, show them all at the same instant
     Show();
-    // Serial.println();
+     Serial.println();
   }
 }}
 
@@ -140,6 +147,5 @@ void computeVerticalLevels() {
     thresholdVertical[y] = (logLevel + linearLevel) * maxLevel;
   }
 }
-
 
 
