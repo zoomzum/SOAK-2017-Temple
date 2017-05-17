@@ -84,7 +84,7 @@ void loop() {
     if (sStart < sEnd) {
 
  //PLACE THE NAME OF YOUR ROUTINE HERE.  It will run for 30 seconds.  If you need to adjust this, change sEnd above to the number of milliseconds you want it to run.      
-      Sparkles();
+      Sounder();
 //^^^^^^^^^^^^^^^^^^^^^^^^    
     } else {
     cont = false;
