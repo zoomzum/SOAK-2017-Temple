@@ -76,7 +76,7 @@ void loop() {
 
   fill_solid( &(leds[0]), 1500, CRGB(0, 0, 0) );
   LEDS.setBrightness(255);
-
+/*
    sStart = 0;
   sEnd=30000;
   cont = true;
@@ -148,6 +148,39 @@ sStart = 0;
   }
 /*
 */
+  sStart = 0;
+  cont = true;
+  sEnd=20000;
+  while (cont == true) {
+    if (sStart < sEnd) {
+  CosmicRainbow();
+   } else {
+      cont = false;
+    }
+  }
+
+  sStart = 0;
+  cont = true;
+  sEnd=20000;
+  while (cont == true) {
+    if (sStart < sEnd) {
+      RedShift();
+    } else {
+      cont = false;
+    }
+  }
+
+  sStart = 0;
+  cont = true;
+  sEnd=20000;
+  while (cont == true) {
+    if (sStart < sEnd) {
+      Edges();
+    } else {
+      cont = false;
+    }
+  }
+
 }//end of loop
 
 void makeArray() {
