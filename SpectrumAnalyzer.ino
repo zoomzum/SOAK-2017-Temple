@@ -1,5 +1,5 @@
 // LED Audio Spectrum Analyzer Display
-// 
+//
 // Creates an impressive LED light show to music input
 //   using Teensy 3.1 with the OctoWS2811 adaptor board
 //   http://www.pjrc.com/store/teensy31.html
@@ -8,31 +8,30 @@
 // Line Level Audio Input connects to analog pin A3
 //   Recommended input circuit:
 //   http://www.pjrc.com/teensy/gui/?info=AudioInputAnalog
-// 
+//
 // This example code is in the public domain.
 
 
-#include <OctoWS2811.h>
+//#include <OctoWS2811.h>
 #include <Audio.h>
-#include <Wire.h>
-#include <SD.h>
-#include <SPI.h>
+//#include <Wire.h>
+//#include <SD.h>
+//#include <SPI.h>
 
 // The display size and color to use
-const unsigned int matrix_width = 60;
-const unsigned int matrix_height = 32;
- unsigned int myColor =0x400020;
- ;//= random(6555);// 0x400020;
+const unsigned int matrix_width = 21;
+const unsigned int matrix_height = 40;
+unsigned int myColor =  0x000020;
 
 // These parameters adjust the vertical thresholds
-const float maxLevel = .01;      // 1.0 = max, lower is more "sensitive"
-const float dynamicRange = 40.0; // total range to display, in decibels
-const float linearBlend = .7;   // useful range is 0 to 0.7
+const float maxLevel = .1;      // 1.0 = max, lower is more "sensitive"
+const float dynamicRange = 80.0; // total range to display, in decibels
+const float linearBlend = .5;   // useful range is 0 to 0.7
 extern "C" float pow10f(float);
 // OctoWS2811 objects
 const int ledsPerPin = 300;// matrix_width * matrix_height/ 6;
-DMAMEM int displayMemory[ledsPerPin*6];
-int drawingMemory[ledsPerPin*6];
+//DMAMEM int displayMemory[ledsPerPin*6];
+int drawingMemory[ledsPerPin * 6];
 const int config = WS2811_GRB | WS2811_800kHz;
 //OctoWS2811 leds(ledsPerPin, displayMemory, drawingMemory, config);
 
@@ -46,36 +45,37 @@ AudioConnection          patchCord1(adc1, fft);
 // vertical pixel to turn on.  Computed in setup() using
 // the 3 parameters above.
 float thresholdVertical[matrix_height];
-
+float n, logLevel, linearLevel;
 // This array specifies how many of the FFT frequency bin
 // to use for each horizontal pixel.  Because humans hear
 // in octaves and FFT bins are linear, the low frequencies
 // use a small number of bins, higher frequencies use more.
 int frequencyBinsHorizontal[matrix_width] = {
-   1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
-   2,  2,  2,  2,  2,  2,  2,  2,  2,  3,
-   3,  3,  3,  3,  4,  4,  4,  4,  4,  5,
+  1,  1, 1,  1,  2,  3,  3,  4, 4,  4,
+  4, 5,  5,  6,  6,  7,  8,  9,  9,  10,
+  10
+};/*,3,  3,  3,  4,  4,  4,  4,  4,  5,
    5,  5,  6,  6,  6,  7,  7,  7,  8,  8,
    9,  9, 10, 10, 11, 12, 12, 13, 14, 15,
   15, 16, 17, 18, 19, 20, 22, 23, 24, 25
-};
+  };*/
 
 
 
 // Run setup once
 void Sounder() {
-  
   // the audio library needs to be given memory to start working
   AudioMemory(12);
 
   // compute the vertical thresholds before starting
   computeVerticalLevels();
 
-// turn on the display
-fill_solid( &(leds[0]), 1500, CRGB(0,0, 0) );
- Show();  loopme();
+  // turn on the display
+  //  leds.begin();
+  Show();
+  loopme();
 }
- //Serial.print("setstart");
+
 // A simple xy() function to turn display matrix coordinates
 // into the index numbers OctoWS2811 requires.  If your LEDs
 // are arranged differently, edit this code...
@@ -86,47 +86,52 @@ unsigned int xy(unsigned int x, unsigned int y) {
   } else {
     // odd numbered rows (1, 3, 5...) are right to left
     return y * matrix_width + matrix_width - 1 - x;
-  
+  }
 
-}}
+}
 
 // Run repetitively
 void loopme() {
-  Serial.print("loopstart");
-  
-  unsigned int x, y, freqBin;
-  float level;
-  if (fft.available()) {
-  myColor = makeColor(random(360),random(255),random(100));  // freqBin counts which FFT frequency data has been used,
-    // starting at low frequency
-    freqBin = 0;
+  while (cont) {
+    unsigned int x, y, freqBin;
+    float level;
+    if (fft.available()) {
+      // myColor = makeColor(random(360),random(255),random(100));  // freqBin counts which FFT frequency data has been used,
+      // starting at low frequency
+      freqBin = 0;
 
-    for (x=0; x < matrix_width; x++) {
-      // get the volume for each horizontal pixel position
-      level = fft.read(freqBin, freqBin + frequencyBinsHorizontal[x] - 1);
+      for (x = 0; x < matrix_width; x++) {
+        // get the volume for each horizontal pixel position
+        level = fft.read(freqBin, freqBin + frequencyBinsHorizontal[x] - 1);
 
-      // uncomment to see the spectrum in Arduino's Serial Monitor
-     Serial.print(level);
-      Serial.print("  ");
-      delay(1);
+        // uncomment to see the spectrum in Arduino's Serial Monitor
+        //Serial.print(level);
+        // Serial.print("  ");
+        // delay(1);
 
-      for (y=0; y < matrix_height; y++) {
-        // for each vertical pixel, check if above the threshold
-        // and turn the LED on or off
-        if (level >= thresholdVertical[y]) {
-          leds[xy(x, y)]= myColor;
-         // leds.setPixel(xy(x, y), myColor);
-        } else {
-          leds[xy(x, y)]= 0x000000;
+        for (y = 0; y < matrix_height; y++) {
+          // for each vertical pixel, check if above the threshold
+          // and turn the LED on or off
+          if (level >= thresholdVertical[y]) {
+            leds[Sail[x][y]] =  CHSV(y * 4, 255, 255);
+            leds[Sail[x][y + ((36 - y) * 2)]] = CHSV(y * 4, 255, 255);
+            //         Serial.print(y);
+            //   Serial.print("  ");
+            // leds.setPixel(xy(x, y), myColor);
+          } else {
+            leds[Sail[x][y]].fadeToBlackBy(10);
+
+            leds[Sail[x][y + ((36 - y) * 2)]].fadeToBlackBy(40);
+          }
         }
+        // increment the frequency bin count, so we display
+        // low to higher frequency from left to right
+        freqBin = freqBin + frequencyBinsHorizontal[x];
       }
-      // increment the frequency bin count, so we display
-      // low to higher frequency from left to right
-      freqBin = freqBin + frequencyBinsHorizontal[x];
+      // after all pixels set, show them all at the same instant
+      Show();
+      //    Serial.println();
     }
-    // after all pixels set, show them all at the same instant
-    Show();
-     Serial.println();
   }
 }
 
@@ -134,9 +139,9 @@ void loopme() {
 // Run once from setup, the compute the vertical levels
 void computeVerticalLevels() {
   unsigned int y;
-  float n, logLevel, linearLevel;
+  //  float n, logLevel, linearLevel;
 
-  for (y=0; y < matrix_height; y++) {
+  for (y = 0; y < matrix_height; y++) {
     n = (float)y / (float)(matrix_height - 1);
     logLevel = pow10f(n * -1.0 * (dynamicRange / 20.0));
     linearLevel = 1.0 - n;
@@ -146,5 +151,80 @@ void computeVerticalLevels() {
   }
 }
 
+
+
+/////////
+
+void Sparkles2() {
+  // the audio library needs to be given memory to start working
+  AudioMemory(12);
+  unsigned int x, y, freqBin;
+
+  // This array holds the volume level (0 to 1.0) for each
+  // vertical pixel to turn on.  Computed in setup() using
+  // the 3 parameters above.
+  float thresholdVertical[72];
+  float level;
+  // This array specifies how many of the FFT frequency bin
+  // to use for each horizontal pixel.  Because humans hear
+  // in octaves and FFT bins are linear, the low frequencies
+  // use a small number of bins, higher frequencies use more.
+  int frequencyBinsColors[21] = {
+    1,  1, 1,  1,  2,  3,  3,  4, 4,  4,
+    4, 5,  6,  7,  8,  9,  10,  11,  12,  12,
+    12
+  };
+  int led,  n,  z , i;
+  unsigned int numLeds;
+  //set y
+  computeVerticalLevels();
+
+  while (cont) {
+
+    float level;
+    if (fft.available()) {
+      // myColor = makeColor(random(360),random(255),random(100));  // freqBin counts which FFT frequency data has been used,
+      // starting at low frequency
+      freqBin = 0;
+
+      for (x = 0; x < 21; x++) {
+        // get the volume for each horizontal pixel position
+        level = fft.read(freqBin, freqBin + frequencyBinsHorizontal[x]  - 1);
+
+        for (y = 0; y < 72; y++) {
+          if (level >= thresholdVertical[y]) {
+            numLeds = pow(-level, 2) * 1000000;
+            if (numLeds > 70) numLeds = 0;
+            if (numLeds > 2)
+            {
+              /*      Serial.print(x);
+                    Serial.print("-");
+                     Serial.print(numLeds);
+                     Serial.print("  ");*/
+              for (n = 0; n < numLeds; n++) {
+                led = random(1500);
+                leds[led] = CHSV( x * 12.75 + 180 , 255, 255);
+              }
+              delay(1);
+            }
+          }
+
+          //light lnum pixels using bin color
+          freqBin = freqBin + frequencyBinsHorizontal[x];
+
+        }
+        //Serial.println();
+        for (i = 0; i < 1500; i++) {
+          leds[i].fadeToBlackBy(10);
+        }
+        if (!Show()) return;
+      }// Show();
+      // delay(100);
+
+      // LEDS.clear()1
+      Show();
+    }
+  }
+}
 
 
