@@ -169,19 +169,19 @@ void Sparkles2() {
   // to use for each horizontal pixel.  Because humans hear
   // in octaves and FFT bins are linear, the low frequencies
   // use a small number of bins, higher frequencies use more.
-  int frequencyBinsColors[21] = {
+  int frequencyBinsHorizontal[21] = {
     1,  1, 1,  1,  2,  3,  3,  4, 4,  4,
     4, 5,  6,  7,  8,  9,  10,  11,  12,  12,
     12
   };
-  int led,  n,  z , i;
-  unsigned int numLeds;
+  int led, i;
+  unsigned int n, numLeds;
   //set y
   computeVerticalLevels();
 
   while (cont) {
 
-    float level;
+    //float level;
     if (fft.available()) {
       // myColor = makeColor(random(360),random(255),random(100));  // freqBin counts which FFT frequency data has been used,
       // starting at low frequency

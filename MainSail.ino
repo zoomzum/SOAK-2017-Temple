@@ -42,9 +42,10 @@
 
 //===============
 #define NUM_LEDS_PER_STRIP 300
-#define NUM_STRIPS 10
+#define NUM_STRIPS 5
 const int PIN_D17 = 17;
 //added for fastLED
+//const CRGBArray<1500> ledArray;
 CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP];
 const int numOfBytes = NUM_LEDS_PER_STRIP * NUM_STRIPS * 3;
 const int numLeds = NUM_STRIPS * NUM_LEDS_PER_STRIP;
@@ -62,8 +63,8 @@ void setup() {
   LEDS.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
   LEDS.setBrightness(100);
   delay(500);
-  Serial.begin(115200);
-  Serial.setTimeout(500);
+//  Serial.begin(115200);
+//  Serial.setTimeout(500);
   LEDS.show();
 
   makeArray();
@@ -76,20 +77,21 @@ void loop() {
 
   fill_solid( &(leds[0]), 1500, CRGB(0, 0, 0) );
   LEDS.setBrightness(255);
-/*
+
    sStart = 0;
   sEnd=30000;
   cont = true;
-  while (cont == true) {
-    if (sStart < sEnd) {
+  //while (cont == true) {
+ //   if (sStart < sEnd) {
 
  //PLACE THE NAME OF YOUR ROUTINE HERE.  It will run for 30 seconds.  If you need to adjust this, change sEnd above to the number of milliseconds you want it to run.      
-      Sounder();
+      Panel();
 //^^^^^^^^^^^^^^^^^^^^^^^^    
-    } else {
-    cont = false;
-    }
-  }
+  //delay(100);
+   // } else {
+   // cont = false;
+//    
+  
   
 /*
 sStart = 0;
@@ -146,8 +148,7 @@ sStart = 0;
       cont = false;
     }
   }
-/*
-*/
+  
   sStart = 0;
   cont = true;
   sEnd=20000;
@@ -180,7 +181,7 @@ sStart = 0;
       cont = false;
     }
   }
-
+*/
 }//end of loop
 
 void makeArray() {

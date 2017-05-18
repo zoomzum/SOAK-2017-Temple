@@ -3,7 +3,7 @@ void CosmicRainbow() {
   while (cont){
     LEDS.setBrightness(100);
     int lnum = 75;
-    int red = 0;
+//    int red = 0;
     for (int red = 255; red >= -255; red -=32) {
       for (int blue = 255; blue >= -255; blue -=16) {
         for (int green = 255; green >= 255; green -= 8) {
@@ -29,7 +29,7 @@ void RedShift() {
   while (cont){
     LEDS.setBrightness(100);
     int lnum = 75;
-    int red = 0;
+ //   int red = 0;
     for (int red = 255; red >= -255; red -=32) {
       for (int blue = 255; blue >= -255; blue -=16) {
         for (int green = 255; green >= 255; green -= 8) {
@@ -55,7 +55,7 @@ void Edges() {
   while (cont){
     LEDS.setBrightness(100);
     int lnum = 75;
-    int red = 0;
+//    int red = 0;
     for (int red = 255; red >= -255; red -=32) {
       for (int blue = 255; blue >= -255; blue -=16) {
         for (int green = 255; green >= 255; green -= 8) {
