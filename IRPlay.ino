@@ -9,7 +9,7 @@ int green= min(Dist*1,255);
 int blue= min(Dist*1.6,255);
  
   leds[Sail[X][Y]] = CRGB( red  , green, blue);
-  Show();
+  LEDS.show();
 //}  
 //fadeToBlackBy(leds,1499, 40);
 }

@@ -34,8 +34,8 @@ void SequenceB() { while (cont){
       for (int ld = 1; ld <= lnum; ld++) {
         for (int x = 1; x <= 20; x++) {
           leds[Sail[x][ld]] = CRGB( abs(red),abs(green), abs(blue));
-         } cont =Show();
-           if(!cont) {return;} 
+         } //cont =Show();
+           if(!Show()) {return;} 
      delay(1);
     //    fill_solid( &(leds[i]), 1500, CRGB(0,0, 00) );
       }

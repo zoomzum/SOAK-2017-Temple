@@ -57,14 +57,16 @@ int  SailTop[11][7] = {73, 74, 75, 76, 77, 78};
 elapsedMillis sStart;
 unsigned long sEnd = 10000;
 boolean cont;
-
+boolean panelActive;
 void setup() {
-   pinMode(PIN_D17, INPUT_PULLUP);
+  pinMode(PIN_D17, INPUT_PULLUP);
   LEDS.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
   LEDS.setBrightness(100);
   delay(500);
-//  Serial.begin(115200);
-//  Serial.setTimeout(500);
+  Serial1.begin(19200);
+
+  //  Serial.begin(115200);
+  //  Serial.setTimeout(500);
   LEDS.show();
 
   makeArray();
@@ -78,110 +80,112 @@ void loop() {
   fill_solid( &(leds[0]), 1500, CRGB(0, 0, 0) );
   LEDS.setBrightness(255);
 
-   sStart = 0;
-  sEnd=30000;
+  sStart = 0;
+  sEnd = 30000;
   cont = true;
   //while (cont == true) {
- //   if (sStart < sEnd) {
+  //   if (sStart < sEnd) {
 
- //PLACE THE NAME OF YOUR ROUTINE HERE.  It will run for 30 seconds.  If you need to adjust this, change sEnd above to the number of milliseconds you want it to run.      
-      Panel();
-//^^^^^^^^^^^^^^^^^^^^^^^^    
+  //PLACE THE NAME OF YOUR ROUTINE HERE.  It will run for 30 seconds.  If you need to adjust this, change sEnd above to the number of milliseconds you want it to run.
+  //  Panel();
+  SequenceB();
+
+  //^^^^^^^^^^^^^^^^^^^^^^^^
   //delay(100);
-   // } else {
-   // cont = false;
-//    
-  
-  
-/*
-sStart = 0;
-  sEnd=10000;
-  cont = true;
-  while (cont == true) {
+  // } else {
+  // cont = false;
+  //
+
+
+  /*
+    sStart = 0;
+    sEnd=10000;
+    cont = true;
+    while (cont == true) {
+      if (sStart < sEnd) {
+        CoolGradient();
+      } else {
+        cont = false;
+      }
+    }
+
+
+    sStart = 0;
+    sEnd=30000;
+    cont = true;
+    while (cont == true) {
     if (sStart < sEnd) {
-      CoolGradient();
+     Corner();//CascadeUp
     } else {
       cont = false;
-    }
-  }
+    }}
 
-
-sStart = 0;
-sEnd=30000;
-cont = true;
-while (cont == true) {
-  if (sStart < sEnd) {
-   Corner();//CascadeUp
-  } else {
-    cont = false;
-  }}
-
-  sStart = 0;
-  cont = true;
-  sEnd=30000;
-  while (cont == true) {
-    if (sStart < sEnd) {
-      Rain();
-    } else {
-      cont = false;
+    sStart = 0;
+    cont = true;
+    sEnd=30000;
+    while (cont == true) {
+      if (sStart < sEnd) {
+        Rain();
+      } else {
+        cont = false;
+      }
     }
-  }
 
-sStart = 0;
-  cont = true;
-  sEnd=20000;
-  while (cont == true) {
-    if (sStart < sEnd) {
-      Rainbow();
-    } else {
-      cont = false;
+    sStart = 0;
+    cont = true;
+    sEnd=20000;
+    while (cont == true) {
+      if (sStart < sEnd) {
+        Rainbow();
+      } else {
+        cont = false;
+      }
     }
-  }
 
-  sStart = 0;
-  cont = true;
-  sEnd=20000;
-  while (cont == true) {
-    if (sStart < sEnd) {
-      SequenceB();
-    } else {
-      cont = false;
+    sStart = 0;
+    cont = true;
+    sEnd=20000;
+    while (cont == true) {
+      if (sStart < sEnd) {
+        SequenceB();
+      } else {
+        cont = false;
+      }
     }
-  }
-  
-  sStart = 0;
-  cont = true;
-  sEnd=20000;
-  while (cont == true) {
-    if (sStart < sEnd) {
-  CosmicRainbow();
-   } else {
-      cont = false;
-    }
-  }
 
-  sStart = 0;
-  cont = true;
-  sEnd=20000;
-  while (cont == true) {
-    if (sStart < sEnd) {
-      RedShift();
-    } else {
-      cont = false;
+    sStart = 0;
+    cont = true;
+    sEnd=20000;
+    while (cont == true) {
+      if (sStart < sEnd) {
+    CosmicRainbow();
+     } else {
+        cont = false;
+      }
     }
-  }
 
-  sStart = 0;
-  cont = true;
-  sEnd=20000;
-  while (cont == true) {
-    if (sStart < sEnd) {
-      Edges();
-    } else {
-      cont = false;
+    sStart = 0;
+    cont = true;
+    sEnd=20000;
+    while (cont == true) {
+      if (sStart < sEnd) {
+        RedShift();
+      } else {
+        cont = false;
+      }
     }
-  }
-*/
+
+    sStart = 0;
+    cont = true;
+    sEnd=20000;
+    while (cont == true) {
+      if (sStart < sEnd) {
+        Edges();
+      } else {
+        cont = false;
+      }
+    }
+  */
 }//end of loop
 
 void makeArray() {
@@ -216,14 +220,20 @@ void makeArray() {
 
 
 boolean Show() {
-  if (sStart > sEnd || digitalRead(PIN_D17)==LOW) {
+  if (sStart > sEnd || digitalRead(PIN_D17) == LOW) {
     delay(10);
     cont = false;
     return cont;
   }
   //test pin here
+  Panel();
+  if (panelActive == true) {
+    while (panelActive == true) {
+      Serial.print("Hit");
+      Panel();
+    }
+  }
   LEDS.show();
-  
   cont = true;
-return cont;
+  return cont;
 }
