@@ -28,3 +28,19 @@ void testOne() {
           }
          }
    }
+
+//   void phiRat() {
+//     while (cont){
+//        LEDS.setBrightness(50);
+//        fill_solid(&(leds[Sail[6][30]]),110, CRGB(0,0,0) );
+       // fill_solid( &(Sail[7][28]), Sail[9][29], CRGB(0,0,0) );
+       // fill_solid( &(Sail[8][27]), Sail[9][27], CRGB(0,0,0) );
+      
+//          if (!Show()) return;
+          //Show();
+ //         delay(100);
+//          fadeToBlackBy(leds,1499, 50);  
+          //fill_solid( &(leds[i]), 1500, CRGB(0,0, 0) );
+  //        }
+  
+//}
