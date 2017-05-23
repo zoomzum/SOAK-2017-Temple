@@ -30,6 +30,7 @@
 // #include <OctoWS2811.h>
 #include <SD.h>
 #include "GIFDecoder.h"
+#include "PhysicalArray.h"
 
 // #include "LEDMap.h"
 
@@ -52,6 +53,8 @@ const uint8_t SD_CS = SS;
 #define GIF_DIRECTORY "/gifs/"
 #define TERMINATE_ANIMATION -1
 #define CONTINUE_ANIMATION 0
+
+
 
 // fields
 int num_files;
@@ -102,13 +105,25 @@ void drawPixelCallback(int16_t x, int16_t y, uint8_t red, uint8_t green, uint8_t
     return;
   }
 
-  leds[Sail[x][y]] = CRGB( red, green, blue);
+  // find x coord in terms of sail array. (y is the same)
+  int sail_x = getSailX(x,y);
+  if (sail_x < 0)
+    return;
+  // set colour
+  leds[Sail[sail_x][y]] = CRGB(red, green, blue);
 
   // for (int i = 0; i < LED_PER_PIX; i++) {
   //   int led_index = myPixelMap [x][y][i];
   //   // converts rgb to hex
   //   leds.setPixel(led_index, ((red << 16) | (green << 8) | blue));
   // }
+}
+
+int getSailX(int16_t x, int16_t y){
+  if (y >= 71)// top of sail has more pixels
+    return x_top_map[x];
+  else 
+    return x_body_map[x];
 }
 
 int increment_file(){
