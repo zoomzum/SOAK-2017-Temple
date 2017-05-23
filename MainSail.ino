@@ -58,6 +58,7 @@ elapsedMillis sStart;
 unsigned long sEnd = 10000;
 boolean cont;
 boolean panelActive;
+
 void setup() {
   pinMode(PIN_D17, INPUT_PULLUP);
   LEDS.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
@@ -65,11 +66,16 @@ void setup() {
   delay(500);
   Serial1.begin(19200);
 
+  // initialize random generator
+  randomSeed(analogRead(3)); 
+
   //  Serial.begin(115200);
   //  Serial.setTimeout(500);
   LEDS.show();
 
   makeArray();
+
+  setupGIFs();
 }
 
 void loop() {
@@ -187,6 +193,7 @@ void loop() {
     }
   */
 }//end of loop
+
 
 void makeArray() {
   int y, s;
