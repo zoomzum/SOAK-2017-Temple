@@ -89,6 +89,9 @@ void loop() {
   sStart = 0;
   sEnd = 30000;
   cont = true;
+
+  Serial.println("DEBUG Looping");
+  delay(1000);
   //while (cont == true) {
   //   if (sStart < sEnd) {
 
@@ -235,14 +238,15 @@ boolean Show() {
     return cont;
   }
   //test pin here
-  Panel();
+  // Panel();
   if (panelActive == true) {
     while (panelActive == true) {
       Serial.print("Hit");
-      Panel();
+      // Panel();
     }
   }
   LEDS.show();
   cont = true;
   return cont;
 }
+

@@ -30,14 +30,14 @@
 // #include <OctoWS2811.h>
 #include <SD.h>
 #include "GIFDecoder.h"
-// #include "PhysicalArray.h"
+#include "PhysicalArray.h"
 
 // #include "LEDMap.h"
 
 //======================================================
 //============ Constants and Fields ====================
 //======================================================
-// #define NUM_LEDS_PER_STRIP 288
+#define NUM_LEDS 1499
 // #define NUM_STRIPS 4
 // const int NUM_LEDS = NUM_LEDS_PER_STRIP * NUM_STRIPS;
 // #define LED_PER_PIX 8
@@ -63,8 +63,8 @@ int fileIndex;
 unsigned long renderTime;
 unsigned long futureTime;
 int controlFlag = 0;
-
-char directory[30];
+char directory[100];
+char pathname[100];
 
 // initialize LED array with the proper LED type
 // OctoWS2811 leds(NUM_LEDS_PER_STRIP, displayMemory, drawingMemory, config);
@@ -76,9 +76,9 @@ char directory[30];
 void screenClearCallback(void) {
   // Wipe all black
   // for (int i = 0; i <= NUM_LEDS; i++) {
-  //   leds.setPixel(i, BLACK);
+    fill_solid( &(leds[0]), 1499, CRGB::Black );
   // }
-  LEDS.clear();
+  // LEDS.clear();
 }
 
 // void startDrawingCallback(void) {
@@ -123,13 +123,13 @@ void drawPixelCallback(int16_t x, int16_t y, uint8_t red, uint8_t green, uint8_t
   // }
 }
 
-int getSailX(int16_t x, int16_t y){
-  if (y >= 71)// top of sail has more pixels
-    // return x_top_map[x];
-    return 1;
+int getSailX(uint16_t x, uint16_t y){
+  if (y > 71)// top of sail has more pixels
+    return -1;
+    // return 1;
   else 
-    // return x_body_map[x];
-    return 1;
+    return x_body_map[x];
+    // return 1;
 }
 
 void increment_file(){
@@ -143,15 +143,14 @@ void increment_file(){
 
 void playGIF(){
   controlFlag = 0; // reset flag
-  char pathname[30];
-  char directory[30];
   strcpy(directory, GIF_DIRECTORY);
   
+
   // Strangely this number must be continully updated
   // num_files = enumerateGIFFiles(directory, false);
 
   increment_file();
-  fileIndex = 1;
+  // fileIndex = 1;
 
   //             Uncomment for random
   // fileIndex = random(num_files);  // select a file index (keep track)
@@ -188,17 +187,17 @@ void setupGIFs(){
   Serial.print("directory: ");
   Serial.println(directory);
 
-  // check if gifs exist
-  if (!SD.exists(directory)) {
-    Serial.println("DEBUG beginning initialization");
-    SD.begin(SD_CS);
-    delay(400);
-    // check again
-    if (!SD.exists(directory)) {
-      Serial.println("initialization failed!");
-      return;
-    }
-  }
+  // // check if gifs exist
+  // if (!SD.exists(directory)) {
+  //   Serial.println("DEBUG beginning initialization");
+  //   SD.begin(SD_CS);
+  //   delay(400);
+  //   // check again
+  //   if (!SD.exists(directory)) {
+  //     Serial.println("initialization failed!");
+  //     return;
+  //   }
+  // }
 
   num_files = enumerateGIFFiles(directory, false);
   Serial.println("SD Setup Complete");

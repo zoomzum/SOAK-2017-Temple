@@ -1,7 +1,7 @@
 void Panel()
 {
 //  Serial1.begin(19200);
-  loopPanel();
+  // loopPanel();
 
 }
 
@@ -9,7 +9,6 @@ void Panel()
 void loopPanel() {
   //while (cont) {
 
- Serial.println("DEBUG 1");
 
   receive();
   delay(10);
@@ -20,17 +19,14 @@ void loopPanel() {
 
 void receive()
 {
-  Serial.println("DEBUG 2");
 
   static int count = 0;
   static uint8_t buf[48];
 
   while (Serial1.available()) {
     uint8_t n = Serial1.read();
-    Serial.println("DEBUG 3");
 
     if (n > 250) {
-      Serial.println("DEBUG 4");
 
       count = 0;
 
