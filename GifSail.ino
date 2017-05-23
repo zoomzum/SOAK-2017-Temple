@@ -30,7 +30,7 @@
 // #include <OctoWS2811.h>
 #include <SD.h>
 #include "GIFDecoder.h"
-#include "PhysicalArray.h"
+// #include "PhysicalArray.h"
 
 // #include "LEDMap.h"
 
@@ -44,8 +44,8 @@
 // #define LED_TYPE OCTOWS2811
 // #define DISPLAY_TIME_SECONDS 30
 // SD confuiguration
-#define USE_SDIO 1
-const uint8_t SD_CS = SS;
+// #define USE_SDIO 1
+const uint8_t SD_CS = BUILTIN_SDCARD;
 
 #define WHITE  0xFFFFFF
 #define BLACK  0x000000
@@ -80,6 +80,10 @@ void screenClearCallback(void) {
   // }
   LEDS.clear();
 }
+
+// void startDrawingCallback(void) {
+//   return;
+// }
 
 void updateScreenCallback(void) {
   // Render current LED array
@@ -121,19 +125,20 @@ void drawPixelCallback(int16_t x, int16_t y, uint8_t red, uint8_t green, uint8_t
 
 int getSailX(int16_t x, int16_t y){
   if (y >= 71)// top of sail has more pixels
-    return x_top_map[x];
+    // return x_top_map[x];
+    return 1;
   else 
-    return x_body_map[x];
+    // return x_body_map[x];
+    return 1;
 }
 
-int increment_file(){
-  // increment file
+void increment_file(){
+  // increment file but don't go over
   if (fileIndex >= num_files - 1)
     fileIndex = 0;
-  if (fileIndex < 0)
+  else if (fileIndex < 0)
     fileIndex = num_files - 1;
   else fileIndex++;
-  return fileIndex;
 }
 
 void playGIF(){
@@ -146,12 +151,16 @@ void playGIF(){
   // num_files = enumerateGIFFiles(directory, false);
 
   increment_file();
+  fileIndex = 1;
 
   //             Uncomment for random
   // fileIndex = random(num_files);  // select a file index (keep track)
 
+  Serial.println("DEBUG File index");
+  Serial.println(fileIndex);
 
   getGIFFilenameByIndex(directory, fileIndex, pathname);
+  Serial.println(pathname);
 
 
 // Repeat Gif until finished or until NEXT button is pushed
@@ -159,23 +168,36 @@ while (cont) {
   Serial.print("#");
   // The gif processing sequence starts here
   int result = processGIFFile(pathname);
-      if (result < 0 || controlFlag < 0) { // Error, skip this one.
-        Serial.println("Error processing GIF file.");
-        increment_file();
-        getGIFFilenameByIndex(directory, fileIndex, pathname);
-        controlFlag = 0; // reset flag
+  if (result < 0 || controlFlag < 0) { // Error, skip this one.
+    Serial.println("Error processing GIF file.");
+    delay(500);
+    increment_file();
+    getGIFFilenameByIndex(directory, fileIndex, pathname);
+    controlFlag = 0; // reset flag
     }
   }
 }
 
 void setupGIFs(){
-  strcpy(directory, GIF_DIRECTORY);
 
+  Serial.println("DEBUG beginning setupGIFs");
+
+
+  strcpy(directory, GIF_DIRECTORY);
+  SD.begin(SD_CS);
+  Serial.print("directory: ");
+  Serial.println(directory);
+
+  // check if gifs exist
   if (!SD.exists(directory)) {
+    Serial.println("DEBUG beginning initialization");
     SD.begin(SD_CS);
     delay(400);
-    Serial.println("initialization failed!");
-    return;
+    // check again
+    if (!SD.exists(directory)) {
+      Serial.println("initialization failed!");
+      return;
+    }
   }
 
   num_files = enumerateGIFFiles(directory, false);
@@ -187,12 +209,16 @@ void setupGIFs(){
 // start on a random file
   fileIndex = random(num_files);
 // or start on the first file
-  fileIndex = 0;
+  // fileIndex = 0;
 
 
 // set callbacks for gif decoder
   setScreenClearCallback(screenClearCallback);
+  // setStartDrawingCallback(startDrawingCallback);
   setUpdateScreenCallback(updateScreenCallback);
   setDrawPixelCallback(drawPixelCallback);
   setCheckControlCallback(checkControlCallback);
+
+  Serial.println("DEBUG setupGIFs Complete");
+
 }

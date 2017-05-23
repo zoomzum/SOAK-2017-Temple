@@ -157,7 +157,7 @@ int lzw_decode(byte *buf, int len) {
             fc= oc= -1;
 
         }
-        else	{
+        else    {
 
             code = c;
             if ((code == slot) && (fc >= 0)) {

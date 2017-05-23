@@ -69,7 +69,7 @@ void setup() {
   // initialize random generator
   randomSeed(analogRead(3)); 
 
-  //  Serial.begin(115200);
+    Serial.begin(115200);
   //  Serial.setTimeout(500);
   LEDS.show();
 
@@ -94,7 +94,9 @@ void loop() {
 
   //PLACE THE NAME OF YOUR ROUTINE HERE.  It will run for 30 seconds.  If you need to adjust this, change sEnd above to the number of milliseconds you want it to run.
   //  Panel();
-  SequenceB();
+  // SequenceB();
+
+  playGIF();
 
   //^^^^^^^^^^^^^^^^^^^^^^^^
   //delay(100);

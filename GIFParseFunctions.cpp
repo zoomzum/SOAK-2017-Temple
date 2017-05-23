@@ -27,7 +27,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#define DEBUG 0 // Set to 1 for debug. Very useful information.
+#define DEBUG 1 // Set to 1 for debug. Very useful information.
 
 #if DEBUG == 1
 #define DEBUG_SCREEN_DESCRIPTOR                             1
@@ -578,6 +578,7 @@ int parseTableBasedImage() {
     if (frameDelay < 1) {
         frameDelay = 1;
     }
+    Serial.println("DEBUG 1");
 
     // Decompress LZW data and display the frame
     if (decompressAndDisplayFrame(filePositionAfter) < 0)
@@ -724,6 +725,7 @@ int decompressAndDisplayFrame(unsigned long filePositionAfter) {
         // How the image is decoded depends upon whether it is interlaced or not
     // Decode the interlaced LZW data into the image buffer
     if (tbiInterlaced) {
+    Serial.println("DEBUG TBI interlaced");
         // Decode every 8th line starting at line 0
         for (int line = tbiImageY + 0; line < tbiHeight + tbiImageY; line += 8) {
             lzw_decode(imageData + (line * WIDTH) + tbiImageX, tbiWidth);
@@ -742,6 +744,7 @@ int decompressAndDisplayFrame(unsigned long filePositionAfter) {
         }
     }
     else    {
+    Serial.println("DEBUG Not TBI interlaced");
         // Decode the non interlaced LZW data into the image data buffer
         for (int line = tbiImageY; line < tbiHeight + tbiImageY; line++) {
             lzw_decode(imageData  + (line * WIDTH) + tbiImageX, tbiWidth);
@@ -761,9 +764,11 @@ int decompressAndDisplayFrame(unsigned long filePositionAfter) {
     // LZW doesn't parse through all the data, manually set position
     file.seek(filePositionAfter);
 
+    Serial.println("DEBUG Parse Functions 2");
     // Optional callback can be used to get drawing routines ready
     if(startDrawingCallback)
         (*startDrawingCallback)();
+    Serial.println("DEBUG Parse Functions 3");
 
     // Optional callback can be check for control flags
     int controlResult = 0;
