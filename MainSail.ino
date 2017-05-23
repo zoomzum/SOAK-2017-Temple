@@ -45,7 +45,8 @@
 #define NUM_STRIPS 5
 #define LONG_PRESS 1000
 #define HOUR 3600*1000
-#define SEC_30 5*1000
+#define DAY 3600*1000*24
+#define RUNTIME 30*1000
 const int buttonPin = 17;
 const int ledPin = 13; 
 
@@ -59,7 +60,7 @@ char inputBuffer[numOfBytes];
 
 int  Sail[21][80];
 int  SailTop[11][7] = {73, 74, 75, 76, 77, 78};
-elapsedMillis sStart;
+elapsedMillis millis_elapsed;
 
 // button stuff
 int currentButtonState;
@@ -70,7 +71,7 @@ long prev_secs_held; // How long the button was held in the previous check
 byte previousButtonState = HIGH;
 unsigned long firstTime; // how long since the button was first pressed 
 
-unsigned long sEnd;
+unsigned long millis_to_run;
 boolean cont;
 boolean panelActive;
 
@@ -92,6 +93,17 @@ void setup() {
   makeArray();
 
   setupGIFs();
+
+}
+
+// call this before every sequence
+void reset_for_next_pattern(){
+  fill_solid( &(leds[0]), 1500, CRGB::Black );
+  LEDS.setBrightness(255);
+
+  millis_elapsed = 0;
+  millis_to_run = RUNTIME;
+  cont = true;
 }
 
 void loop() {
@@ -99,114 +111,101 @@ void loop() {
   //  if(Serial.available()>0){
   //  Serial.readBytes(inputBuffer, numOfBytes);
 
-  fill_solid( &(leds[0]), 1500, CRGB(0, 0, 0) );
-  LEDS.setBrightness(255);
 
-  sStart = 0;
-  sEnd = SEC_30;
-  cont = true;
-
-  Serial.println("DEBUG Looping");
-  delay(1000);
-  //while (cont == true) {
-  //   if (sStart < sEnd) {
-
-  //PLACE THE NAME OF YOUR ROUTINE HERE.  It will run for 30 seconds.  If you need to adjust this, change sEnd above to the number of milliseconds you want it to run.
+  //PLACE THE NAME OF YOUR ROUTINE HERE.  It will run for 30 seconds.  If you need to adjust this, change millis_to_run above to the number of milliseconds you want it to run.
   //  Panel();
   // SequenceB();
 
+  reset_for_next_pattern();
+  millis_to_run = 35*1000; // default is 30 seconds
   playGIF();
 
-  //^^^^^^^^^^^^^^^^^^^^^^^^
-  //delay(100);
-  // } else {
-  // cont = false;
-  //
 
+  reset_for_next_pattern();
+  CoolGradient();
 
   /*
-    sStart = 0;
-    sEnd=10000;
+    millis_elapsed = 0;
+    millis_to_run=10000;
     cont = true;
     while (cont == true) {
-      if (sStart < sEnd) {
-        CoolGradient();
+      if (millis_elapsed < millis_to_run) {
       } else {
         cont = false;
       }
     }
 
 
-    sStart = 0;
-    sEnd=30000;
+    millis_elapsed = 0;
+    millis_to_run=30000;
     cont = true;
     while (cont == true) {
-    if (sStart < sEnd) {
+    if (millis_elapsed < millis_to_run) {
      Corner();//CascadeUp
     } else {
       cont = false;
     }}
 
-    sStart = 0;
+    millis_elapsed = 0;
     cont = true;
-    sEnd=30000;
+    millis_to_run=30000;
     while (cont == true) {
-      if (sStart < sEnd) {
+      if (millis_elapsed < millis_to_run) {
         Rain();
       } else {
         cont = false;
       }
     }
 
-    sStart = 0;
+    millis_elapsed = 0;
     cont = true;
-    sEnd=20000;
+    millis_to_run=20000;
     while (cont == true) {
-      if (sStart < sEnd) {
+      if (millis_elapsed < millis_to_run) {
         Rainbow();
       } else {
         cont = false;
       }
     }
 
-    sStart = 0;
+    millis_elapsed = 0;
     cont = true;
-    sEnd=20000;
+    millis_to_run=20000;
     while (cont == true) {
-      if (sStart < sEnd) {
+      if (millis_elapsed < millis_to_run) {
         SequenceB();
       } else {
         cont = false;
       }
     }
 
-    sStart = 0;
+    millis_elapsed = 0;
     cont = true;
-    sEnd=20000;
+    millis_to_run=20000;
     while (cont == true) {
-      if (sStart < sEnd) {
+      if (millis_elapsed < millis_to_run) {
     CosmicRainbow();
      } else {
         cont = false;
       }
     }
 
-    sStart = 0;
+    millis_elapsed = 0;
     cont = true;
-    sEnd=20000;
+    millis_to_run=20000;
     while (cont == true) {
-      if (sStart < sEnd) {
+      if (millis_elapsed < millis_to_run) {
         RedShift();
       } else {
         cont = false;
       }
     }
 
-    sStart = 0;
+    millis_elapsed = 0;
     cont = true;
-    sEnd=20000;
+    millis_to_run=20000;
     while (cont == true) {
-      if (sStart < sEnd) {
+      if (millis_elapsed < millis_to_run) {
         Edges();
       } else {
         cont = false;
@@ -278,10 +277,10 @@ bool checkButtonStatus(){
 
       // Button held for 1-3 seconds
       if (secs_held >= 1 && secs_held < 3) {
-        if (sEnd >= HOUR)
-          sEnd = SEC_30;
+        if (millis_to_run >= HOUR)
+          millis_to_run = RUNTIME;
         else
-          sEnd = HOUR;
+          millis_to_run = HOUR;
         return true;
       }
 
@@ -300,8 +299,11 @@ bool checkButtonStatus(){
 
 bool Show() {
 
-  if (sStart > sEnd)
-    return false; // time's up
+  // time's up
+  if (millis_elapsed > millis_to_run){
+    cont = false;
+    return cont; 
+  }
 
   // test if time press
   if (digitalRead(buttonPin) == LOW) {
@@ -310,12 +312,12 @@ bool Show() {
     while (digitalRead(buttonPin) == LOW)
         delay(10); 
     if(millis() - buttonPressedTime > LONG_PRESS) {
-        if (sEnd >= HOUR)
-          sEnd = SEC_30;
+        if (millis_to_run >= HOUR)
+          millis_to_run = RUNTIME;
         else
-          sEnd = HOUR;
+          millis_to_run = HOUR;
       } else {
-      sEnd = SEC_30;
+      millis_to_run = RUNTIME;
       cont = false;
       return cont;
     }

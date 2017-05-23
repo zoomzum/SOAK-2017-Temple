@@ -143,11 +143,8 @@ void increment_file(){
 
 void playGIF(){
   controlFlag = 0; // reset flag
+  cont = true;
   strcpy(directory, GIF_DIRECTORY);
-  
-
-  // Strangely this number must be continully updated
-  // num_files = enumerateGIFFiles(directory, false);
 
   increment_file();
   // fileIndex = 1;
@@ -155,20 +152,16 @@ void playGIF(){
   //             Uncomment for random
   // fileIndex = random(num_files);  // select a file index (keep track)
 
-  Serial.println("DEBUG File index");
-  Serial.println(fileIndex);
-
   getGIFFilenameByIndex(directory, fileIndex, pathname);
   Serial.println(pathname);
-
 
 // Repeat Gif until finished or until NEXT button is pushed
 while (cont) {
   Serial.print("#");
   // The gif processing sequence starts here
   int result = processGIFFile(pathname);
-  if (result < 0 || controlFlag < 0) { // Error, skip this one.
-    Serial.println("Error processing GIF file.");
+  // if (result < 0 ) Serial.println("Error processing GIF file.");
+  if (result < 0 || controlFlag < 0) { // End this gif.
     delay(100);
     return;
     }
@@ -215,7 +208,5 @@ void setupGIFs(){
   setUpdateScreenCallback(updateScreenCallback);
   setDrawPixelCallback(drawPixelCallback);
   setCheckControlCallback(checkControlCallback);
-
-  Serial.println("DEBUG setupGIFs Complete");
 
 }
