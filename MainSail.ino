@@ -43,7 +43,12 @@
 //===============
 #define NUM_LEDS_PER_STRIP 300
 #define NUM_STRIPS 5
-const int PIN_D17 = 17;
+#define LONG_PRESS 1000
+#define HOUR 3600*1000
+#define SEC_30 5*1000
+const int buttonPin = 17;
+const int ledPin = 13; 
+
 //added for fastLED
 //const CRGBArray<1500> ledArray;
 CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP];
@@ -55,16 +60,27 @@ char inputBuffer[numOfBytes];
 int  Sail[21][80];
 int  SailTop[11][7] = {73, 74, 75, 76, 77, 78};
 elapsedMillis sStart;
-unsigned long sEnd = 10000;
+
+// button stuff
+int currentButtonState;
+int buttonPressedTime;
+long millis_held;    // How long the button was held (milliseconds)
+long secs_held;      // How long the button was held (seconds)
+long prev_secs_held; // How long the button was held in the previous check
+byte previousButtonState = HIGH;
+unsigned long firstTime; // how long since the button was first pressed 
+
+unsigned long sEnd;
 boolean cont;
 boolean panelActive;
 
 void setup() {
-  pinMode(PIN_D17, INPUT_PULLUP);
+  pinMode(buttonPin, INPUT_PULLUP);
   LEDS.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
   LEDS.setBrightness(100);
   delay(500);
   Serial1.begin(19200);
+  previousButtonState = HIGH;
 
   // initialize random generator
   randomSeed(analogRead(3)); 
@@ -87,7 +103,7 @@ void loop() {
   LEDS.setBrightness(255);
 
   sStart = 0;
-  sEnd = 30000;
+  sEnd = SEC_30;
   cont = true;
 
   Serial.println("DEBUG Looping");
@@ -229,13 +245,80 @@ void makeArray() {
   }
 }
 
+// https://playground.arduino.cc/Code/HoldButton
+bool checkButtonStatus(){
+  currentButtonState = digitalRead(buttonPin);
 
+  // if the button state changes to pressed, remember the start time 
+  if (currentButtonState == LOW && previousButtonState == HIGH && (millis() - firstTime) > LONG_PRESS) {
+    firstTime = millis();
+    Serial.println("DEBUG button pressed");
+  }
 
-boolean Show() {
-  if (sStart > sEnd || digitalRead(PIN_D17) == LOW) {
-    delay(10);
-    cont = false;
-    return cont;
+  millis_held = (millis() - firstTime);
+  secs_held = millis_held / 1000;
+
+  // This if statement is a basic debouncing tool, the button must be pushed for at least
+  // 100 milliseconds in a row for it to be considered as a push.
+  if (millis_held > 50) {
+    Serial.println("DEBUG button pressed");
+    if (currentButtonState == LOW && secs_held > prev_secs_held) {
+      // ledblink(1, 50, ledPin); // Each second the button is held blink the indicator led
+    }
+
+    // check if the button was released since we last checked
+    if (currentButtonState == HIGH && previousButtonState == LOW) {
+      // HERE YOU WOULD ADD VARIOUS ACTIONS AND TIMES FOR YOUR OWN CODE
+      // ===============================================================================
+
+      // Button pressed for less than 1 second, one long LED blink
+      if (secs_held <= 0) {
+        return false; // skip to next pattern
+      }
+
+      // Button held for 1-3 seconds
+      if (secs_held >= 1 && secs_held < 3) {
+        if (sEnd >= HOUR)
+          sEnd = SEC_30;
+        else
+          sEnd = HOUR;
+        return true;
+      }
+
+      // Button held for > 3 seconds, reset
+      if (secs_held >= 3) {
+        setup(); // reset
+        return false;
+      }
+      // ===============================================================================
+    }
+  }
+  previousButtonState = currentButtonState;
+  prev_secs_held = secs_held;
+  return true; // change nothing
+}
+
+bool Show() {
+
+  if (sStart > sEnd)
+    return false; // time's up
+
+  // test if time press
+  if (digitalRead(buttonPin) == LOW) {
+    buttonPressedTime = millis();
+    delay(20); // debounce
+    while (digitalRead(buttonPin) == LOW)
+        delay(10); 
+    if(millis() - buttonPressedTime > LONG_PRESS) {
+        if (sEnd >= HOUR)
+          sEnd = SEC_30;
+        else
+          sEnd = HOUR;
+      } else {
+      sEnd = SEC_30;
+      cont = false;
+      return cont;
+    }
   }
   //test pin here
   // Panel();

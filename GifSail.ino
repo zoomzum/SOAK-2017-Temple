@@ -169,7 +169,7 @@ while (cont) {
   int result = processGIFFile(pathname);
   if (result < 0 || controlFlag < 0) { // Error, skip this one.
     Serial.println("Error processing GIF file.");
-    delay(200);
+    delay(100);
     return;
     }
   }
