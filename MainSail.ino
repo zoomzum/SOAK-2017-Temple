@@ -78,22 +78,160 @@ void loop() {
   LEDS.setBrightness(255);
 
    sStart = 0;
+sEnd=30000;
+ cont = true;
+  while (cont == true) {
+   if (sStart < sEnd) {
+
+ //PLACE THE NAME OF YOUR ROUTINE HERE.  It will run for 30 seconds.  If you need to adjust this, change sEnd above to the number of milliseconds you want it to run.      
+//phiRat();
+ //  Rain();
+//Sounder();
+
+allBlack();  //Please run this before logging off
+   }}
+/*
+//    }}
+
+sStart = 0;
   sEnd=30000;
   cont = true;
   while (cont == true) {
     if (sStart < sEnd) {
-
- //PLACE THE NAME OF YOUR ROUTINE HERE.  It will run for 30 seconds.  If you need to adjust this, change sEnd above to the number of milliseconds you want it to run.      
-      Sparkles();
-//^^^^^^^^^^^^^^^^^^^^^^^^    
+     WolfBoxes();
     } else {
-    cont = false;
+      cont = false;
     }
   }
-  
-/*
+//     
 sStart = 0;
-  sEnd=10000;
+  sEnd=30000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+   WolfColorTunnel();
+    } else {
+      cont = false;
+    }
+  }
+//   
+sStart = 0;
+  sEnd=30000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+    WolfFuzzScreen();
+    } else {
+      cont = false;
+    }
+  }
+//          
+sStart = 0;
+  sEnd=30000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+    WolfComets(true);
+    } else {
+      cont = false;
+    }
+  }
+//  
+sStart = 0;
+  sEnd=30000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+      WolfAtariPong(false);
+    } else {
+      cont = false;
+    }
+  }
+// sStart = 0;
+  sEnd=30000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+      WolfAtariPong(false);
+    } else {
+      cont = false;
+    }
+  }  
+//      WolfColorWheel(true);
+//sStart = 0;
+  sEnd=30000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+      WolfAtariPong(false);
+    } else {
+      cont = false;
+    }
+  }sStart = 0;
+  sEnd=30000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+      WolfAlienSpaceship();
+    } else {
+      cont = false;
+    }
+  }    
+// sStart = 0;
+  sEnd=30000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+      WolfFractals();
+    } else {
+      cont = false;
+    }
+  }     
+//RedShift();
+//testOne();
+
+
+//^^^^^^^^^^^^^^^^^^^^^^^^    
+//    } else {
+ //   cont = false;
+  //  }
+  //}
+
+sStart = 0;
+  sEnd=30000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+    CosmicRainbow();
+    } else {
+      cont = false;
+    }
+  }
+
+sStart = 0;
+  sEnd=30000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+    RedShift();
+    } else {
+      cont = false;
+    }
+  }
+
+  sStart = 0;
+  sEnd=30000;
+  cont = true;
+  while (cont == true) {
+    if (sStart < sEnd) {
+    Edges();
+    } else {
+      cont = false;
+    }
+  }
+
+sStart = 0;
+  sEnd=30000;
   cont = true;
   while (cont == true) {
     if (sStart < sEnd) {
@@ -119,7 +257,7 @@ while (cont == true) {
   sEnd=30000;
   while (cont == true) {
     if (sStart < sEnd) {
-      Rain();
+      Sparkles2();
     } else {
       cont = false;
     }
@@ -138,7 +276,7 @@ sStart = 0;
 
   sStart = 0;
   cont = true;
-  sEnd=20000;
+  sEnd=30000;
   while (cont == true) {
     if (sStart < sEnd) {
       SequenceB();
@@ -157,10 +295,14 @@ void makeArray() {
   for (int x = 1; x < 20; x += 2) {
     int l =  (150 * s);
     int  l2 = l + 149;
+    Sail[x][0]=l;
+    Sail[x+1][0]=l2;
+    
     for (y = 1; y <= 75; y++) {
       Sail[x][y] = l++;
       Sail[x + 1][y] = l2--;
     }
+     
     s++;
 
   }
@@ -192,4 +334,13 @@ boolean Show() {
   
   cont = true;
 return cont;
+}
+
+void allWhite(){
+  fill_solid( &leds[0], 1500, CRGB(255,255, 255) );
+  LEDS.show();
+}
+void allBlack(){
+  fill_solid(&leds[0], 1500, CRGB(0,0, 0) );
+    LEDS.show();
 }
