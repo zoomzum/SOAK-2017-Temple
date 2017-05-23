@@ -134,11 +134,11 @@ int getSailX(uint16_t x, uint16_t y){
 
 void increment_file(){
   // increment file but don't go over
-  if (fileIndex >= num_files - 1)
+  fileIndex++;
+  if (fileIndex >= num_files)
     fileIndex = 0;
   else if (fileIndex < 0)
-    fileIndex = num_files - 1;
-  else fileIndex++;
+    fileIndex = 0;
 }
 
 void playGIF(){
@@ -169,10 +169,8 @@ while (cont) {
   int result = processGIFFile(pathname);
   if (result < 0 || controlFlag < 0) { // Error, skip this one.
     Serial.println("Error processing GIF file.");
-    delay(500);
-    increment_file();
-    getGIFFilenameByIndex(directory, fileIndex, pathname);
-    controlFlag = 0; // reset flag
+    delay(200);
+    return;
     }
   }
 }
