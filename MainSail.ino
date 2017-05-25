@@ -53,6 +53,8 @@ const int ledPin = 13;
 //added for fastLED
 //const CRGBArray<1500> ledArray;
 CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP];
+CRGB leds_backup[NUM_STRIPS * NUM_LEDS_PER_STRIP];
+CHSV IR_leds[NUM_STRIPS * NUM_LEDS_PER_STRIP];
 const int numOfBytes = NUM_LEDS_PER_STRIP * NUM_STRIPS * 3;
 const int numLeds = NUM_STRIPS * NUM_LEDS_PER_STRIP;
 
@@ -61,38 +63,39 @@ char inputBuffer[numOfBytes];
 int  Sail[21][80];
 int  SailTop[11][7] = {73, 74, 75, 76, 77, 78};
 elapsedMillis millis_elapsed;
+elapsedMillis frame_millis_elapsed;
+unsigned long millis_to_run;
+unsigned long last_frame_millis;
 
 // button stuff
-int currentButtonState;
 int buttonPressedTime;
-long millis_held;    // How long the button was held (milliseconds)
-long secs_held;      // How long the button was held (seconds)
-long prev_secs_held; // How long the button was held in the previous check
-byte previousButtonState = HIGH;
-unsigned long firstTime; // how long since the button was first pressed 
 
-unsigned long millis_to_run;
 boolean cont;
 boolean panelActive;
 
 void setup() {
+  Serial.begin(115200);
+  delay(20);
+  Serial.println("Initializing");
+
+
   pinMode(buttonPin, INPUT_PULLUP);
   LEDS.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
   LEDS.setBrightness(100);
-  delay(500);
+  delay(400);
   Serial1.begin(19200);
-  previousButtonState = HIGH;
 
   // initialize random generator
-  randomSeed(analogRead(3)); 
+  randomSeed(millis()); 
 
-    Serial.begin(115200);
-  //  Serial.setTimeout(500);
   LEDS.show();
 
   makeArray();
 
-  setupGIFs();
+  // setupGIFs();
+
+  // initializePanel();
+  Serial.println("Initialization complete");
 
 }
 
@@ -111,19 +114,26 @@ void loop() {
   //  if(Serial.available()>0){
   //  Serial.readBytes(inputBuffer, numOfBytes);
 
+  // reset_for_next_pattern();
+  // loopPanel();
 
   //PLACE THE NAME OF YOUR ROUTINE HERE.  It will run for 30 seconds.  If you need to adjust this, change millis_to_run above to the number of milliseconds you want it to run.
   //  Panel();
   // SequenceB();
 
-  reset_for_next_pattern();
-  millis_to_run = 35*1000; // default is 30 seconds
-  playGIF();
+  // reset_for_next_pattern();
+  // millis_to_run = 35*1000; // default is 30 seconds
+  // playGIF();
 
 
   reset_for_next_pattern();
   CoolGradient();
 
+  reset_for_next_pattern();
+  WolfPinwheel_2();
+
+  // reset_for_next_pattern();
+  // WolfPinwheel_2();
   /*
     millis_elapsed = 0;
     millis_to_run=10000;
@@ -244,93 +254,67 @@ void makeArray() {
   }
 }
 
-// https://playground.arduino.cc/Code/HoldButton
-bool checkButtonStatus(){
-  currentButtonState = digitalRead(buttonPin);
-
-  // if the button state changes to pressed, remember the start time 
-  if (currentButtonState == LOW && previousButtonState == HIGH && (millis() - firstTime) > LONG_PRESS) {
-    firstTime = millis();
-    Serial.println("DEBUG button pressed");
-  }
-
-  millis_held = (millis() - firstTime);
-  secs_held = millis_held / 1000;
-
-  // This if statement is a basic debouncing tool, the button must be pushed for at least
-  // 100 milliseconds in a row for it to be considered as a push.
-  if (millis_held > 50) {
-    Serial.println("DEBUG button pressed");
-    if (currentButtonState == LOW && secs_held > prev_secs_held) {
-      // ledblink(1, 50, ledPin); // Each second the button is held blink the indicator led
-    }
-
-    // check if the button was released since we last checked
-    if (currentButtonState == HIGH && previousButtonState == LOW) {
-      // HERE YOU WOULD ADD VARIOUS ACTIONS AND TIMES FOR YOUR OWN CODE
-      // ===============================================================================
-
-      // Button pressed for less than 1 second, one long LED blink
-      if (secs_held <= 0) {
-        return false; // skip to next pattern
-      }
-
-      // Button held for 1-3 seconds
-      if (secs_held >= 1 && secs_held < 3) {
-        if (millis_to_run >= HOUR)
-          millis_to_run = RUNTIME;
-        else
-          millis_to_run = HOUR;
-        return true;
-      }
-
-      // Button held for > 3 seconds, reset
-      if (secs_held >= 3) {
-        setup(); // reset
-        return false;
-      }
-      // ===============================================================================
-    }
-  }
-  previousButtonState = currentButtonState;
-  prev_secs_held = secs_held;
-  return true; // change nothing
+CRGB hsv2rgb(CHSV hsv){
+  CRGB rgb;
+  hsv2rgb_rainbow(hsv, rgb);
+  return rgb;
 }
 
 bool Show() {
-
   // time's up
   if (millis_elapsed > millis_to_run){
     cont = false;
     return cont; 
   }
 
-  // test if time press
+  // test if button press, short or long
   if (digitalRead(buttonPin) == LOW) {
     buttonPressedTime = millis();
     delay(20); // debounce
     while (digitalRead(buttonPin) == LOW)
         delay(10); 
-    if(millis() - buttonPressedTime > LONG_PRESS) {
-        if (millis_to_run >= HOUR)
-          millis_to_run = RUNTIME;
-        else
-          millis_to_run = HOUR;
+    if(millis() - buttonPressedTime >= LONG_PRESS) {
+        millis_to_run = HOUR;
       } else {
       millis_to_run = RUNTIME;
       cont = false;
       return cont;
     }
   }
-  //test pin here
-  // Panel();
-  if (panelActive == true) {
-    while (panelActive == true) {
-      Serial.print("Hit");
-      // Panel();
-    }
+
+
+  /* This block deals with the reading and adding of IR board infromation*/
+  // test
+  if(Serial.read() == 'a'){
+    IR_leds[Sail[1][1]] = CHSV(100, 255, 255);
+    Serial.println("setting leds[Sail[1][1]] = CHSV(100, 255, 255);");
+  }
+
+  // Read from IR Panel
+  receive();
+  for (int i = 0; i < NUM_STRIPS*NUM_LEDS_PER_STRIP; ++i)
+  { 
+    IR_leds[i].v = max(IR_leds[i].v - (int) frame_millis_elapsed, 0);
+
+    // store original LED colors
+    memcpy( leds_backup, leds, NUM_STRIPS * NUM_LEDS_PER_STRIP * sizeof(CRGB)  );
+    // add layer to LEDs
+    leds[i] += hsv2rgb(IR_leds[i]);
+    // print out debug information
+    // if (IR_leds[i].v > 0)
+    // {
+    //   Serial.print("IR_leds[i].v = ");
+    //   Serial.println(leds[i].g);
+    //   Serial.print("frame_millis_elapsed = ");
+    //   Serial.println(frame_millis_elapsed);
+    // }
   }
   LEDS.show();
+  //restore original colors
+  memcpy( leds, leds_backup, NUM_STRIPS * NUM_LEDS_PER_STRIP * sizeof(CRGB) );
+  /* End IR block*/
+
+  frame_millis_elapsed = 0;
   cont = true;
   return cont;
 }
