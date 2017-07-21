@@ -92,7 +92,7 @@ void setup() {
 
   makeArray();
 
-  // setupGIFs();
+  setupGIFs();
 
   // initializePanel();
   Serial.println("Initialization complete");
@@ -121,107 +121,61 @@ void loop() {
   //  Panel();
   // SequenceB();
 
-  // reset_for_next_pattern();
+  reset_for_next_pattern();
   // millis_to_run = 35*1000; // default is 30 seconds
-  // playGIF();
+  playGIF();
 
 
   reset_for_next_pattern();
   CoolGradient();
 
   reset_for_next_pattern();
+  WolfAlienSpaceship();
+
+  reset_for_next_pattern();
+  WolfAtariPong(true);
+
+  reset_for_next_pattern();
+  WolfBoxes();
+
+  reset_for_next_pattern();
+  WolfColorTunnel();
+
+  reset_for_next_pattern();
+  WolfColorWheel(true);  //true=black sector, false=all color
+  
+  reset_for_next_pattern();
+  WolfComets(true);    //true=fade-to-black and reset; false=persistent color trails (very different looks!)
+
+  reset_for_next_pattern();
+  WolfEyeball();
+
+  reset_for_next_pattern();
+  WolfFractals();     //UNFINISHED: Use only if you are desperate for more patterns!
+
+  reset_for_next_pattern();
+  WolfFuzzScreen();
+
+  reset_for_next_pattern();
+  WolfMoire(true);
+
+  reset_for_next_pattern();
+  WolfPinwheel_1();
+
+  reset_for_next_pattern();
   WolfPinwheel_2();
 
-  // reset_for_next_pattern();
-  // WolfPinwheel_2();
-  /*
-    millis_elapsed = 0;
-    millis_to_run=10000;
-    cont = true;
-    while (cont == true) {
-      if (millis_elapsed < millis_to_run) {
-      } else {
-        cont = false;
-      }
-    }
+  reset_for_next_pattern();
+  WolfSeaStorm();
 
+  reset_for_next_pattern();
+  WolfStarfield(false);   //true=color stars, false=white only
 
-    millis_elapsed = 0;
-    millis_to_run=30000;
-    cont = true;
-    while (cont == true) {
-    if (millis_elapsed < millis_to_run) {
-     Corner();//CascadeUp
-    } else {
-      cont = false;
-    }}
+  reset_for_next_pattern();
+  WolfSpiralStarfield(true, true); //true=color stars, false=white only (pattern looks best using(true,true))
 
-    millis_elapsed = 0;
-    cont = true;
-    millis_to_run=30000;
-    while (cont == true) {
-      if (millis_elapsed < millis_to_run) {
-        Rain();
-      } else {
-        cont = false;
-      }
-    }
-
-    millis_elapsed = 0;
-    cont = true;
-    millis_to_run=20000;
-    while (cont == true) {
-      if (millis_elapsed < millis_to_run) {
-        Rainbow();
-      } else {
-        cont = false;
-      }
-    }
-
-    millis_elapsed = 0;
-    cont = true;
-    millis_to_run=20000;
-    while (cont == true) {
-      if (millis_elapsed < millis_to_run) {
-        SequenceB();
-      } else {
-        cont = false;
-      }
-    }
-
-    millis_elapsed = 0;
-    cont = true;
-    millis_to_run=20000;
-    while (cont == true) {
-      if (millis_elapsed < millis_to_run) {
-    CosmicRainbow();
-     } else {
-        cont = false;
-      }
-    }
-
-    millis_elapsed = 0;
-    cont = true;
-    millis_to_run=20000;
-    while (cont == true) {
-      if (millis_elapsed < millis_to_run) {
-        RedShift();
-      } else {
-        cont = false;
-      }
-    }
-
-    millis_elapsed = 0;
-    cont = true;
-    millis_to_run=20000;
-    while (cont == true) {
-      if (millis_elapsed < millis_to_run) {
-        Edges();
-      } else {
-        cont = false;
-      }
-    }
-  */
+  reset_for_next_pattern();
+  Sounder();
 }//end of loop
 
 
